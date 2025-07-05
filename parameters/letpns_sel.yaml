@@ -1,0 +1,30 @@
+# default configurations already setup here, for example
+# jec/jer 
+# https://github.com/PocketCoffea/PocketCoffea/tree/d6126ac8e62780788674e0280263e0b9b4f78211/pocket_coffea/parameters
+
+# name are fixed !!!!
+lepton_sel:
+  Electron:
+      pt: 15
+      eta: 2.4
+      iso: 0.06
+      first: True
+      id: mvaFall17V2Iso_WP80
+  Muon:
+       pt: 15
+       eta: 2.4
+       iso: 0.25
+       id: tightId 
+  Jet:
+    dr_lepton: 0.4
+    pt: 30
+    eta: 2.4
+    jetId: 2
+    puId:
+      wp: L
+      value: 4
+      maxpt: 50.0
+    btag:
+      wp: M
+
+

@@ -35,16 +35,16 @@ class VBS_WV_Processor(BaseProcessorABC):
         print(f" mvaIso : {self.events.Electron.mvaIso}")
         print(f" mvaIso_WP80 : {self.events.Electron.mvaIso_WP90}")
         tight_electron = self.events["ElectronGood"]
-        self.events["LeptonsGood"] = ak.concatenate((self.events.MuonGood, self.events.ElectronGood), axis=1)
-        tight_leptons = self.events["LeptonsGood"]
+        self.events["LeptonGood"] = ak.concatenate((self.events.MuonGood, self.events.ElectronGood), axis=1)
+        tight_leptons = self.events["LeptonGood"]
         
         
         # selection on jet and fatjet...checking leptons not overlapping with jets/fatjets
         self.events["CleanFatJet"], self.CleanFatJetMask = jet_selection(
-            self.events, "FatJet", self.params, self._year,  leptons_collection="LeptonsGood"
+            self.events, "FatJet", self.params, self._year,  leptons_collection="LeptonGood"
         )
         self.events["CleanJet"], self.CleanJetMask = jet_selection(
-            self.events, "Jet", self.params, self._year,  leptons_collection="LeptonsGood"
+            self.events, "Jet", self.params, self._year,  leptons_collection="LeptonGood"
         )
         sorted_indices = ak.argsort(self.events.CleanJet.pt, axis=1, ascending=False)
         print(f" ak4 before sorting: {self.events.CleanJet.pt}")
@@ -64,11 +64,11 @@ class VBS_WV_Processor(BaseProcessorABC):
     def count_objects(self, variation):
         self.events["nMuonGood"] = ak.num(self.events.MuonGood)
         self.events["nElectronGood"] = ak.num(self.events.ElectronGood)
-        self.events["nLeptonsGood"] = ak.num(self.events.LeptonsGood)
+        self.events["nLeptonGood"] = ak.num(self.events.LeptonGood)
         self.events["nCleanFatJets"] = ak.num(self.events.CleanFatJet)
         self.events["nCleanJets"] = ak.num(self.events.CleanJet)
         print("**************************")
-        print(f" n. good leptons: {self.events.nLeptonsGood}")
+        print(f" n. good leptons: {self.events.nLeptonGood}")
         print(f" n. good muons: {self.events.nMuonGood}")
         print(f" n. good electrons: {self.events.nElectronGood}")
         print(f" n. clean jets {self.events.nCleanJets}")

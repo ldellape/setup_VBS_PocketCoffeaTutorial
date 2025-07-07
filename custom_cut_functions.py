@@ -73,45 +73,48 @@ def semileptonic(events, params, year, sample, **kwargs):
     single_muon = events.nMuonGood == 1
     double_electron = events.nElectronGood == 2
     double_muon = events.nMuonGood == 2
-    print(events.MET.pt)
-    print(events.Muon.pt)
-    print(events.MuonGood.pt)
+    print(f" MET: {events.MET.pt}")
+    print(f" Muon: {events.MuonGood.pt}")
+    print(f" Electron: {events.ElectronGood.pt}")
     if params["W"] is True:
+        print("ok W")
         mask = (
-            (events.nLeptonsGood == 1)
-            & (
-                (
-                    single_muon
-                    & ak.firsts(events.MuonGood.pt > params["pt_leading_muon"])
-                )
-                | (
-                    single_electron
-                    & ak.firsts(events.ElectronGood.pt > params["pt_leading_muon"])
-                )
-            )
-            & (
-                (events.nCleanJets >= params["nJet"])
-                | (
-                    (events.nCleanFatJets >= params["nFatJets"])
-                    & (events.nCleanJets >= params["nJet_with_FatJet"])
+            (events.nLeptonGood == 1)
+        &
+        (
+            (
+                single_electron
+                & (
+                    ak.firsts(events.LeptonGood.pt)
+                    > params["pt_leading_electron"]
                 )
             )
-            & (events.MET.pt > params["met"])
+            | (
+                single_muon
+                & (ak.firsts(events.LeptonGood.pt) > params["pt_leading_muon"])
+            )
+        )
+        & (events.nCleanJets >= params["nJet"])
+        | (
+            (events.nCleanFatJets >= params["nFatJets"])
+            & (events.nCleanJets >= params["nJet_with_FatJet"])
+          )
+        & (events.MET.pt > params["met"])
         )
 
     elif params["Z"] is True:
         mask = (
-            (events.nLeptonsGood == 2)
+            (events.nLeptonGood == 2)
             & (
                 (
                     double_muon
-                    & (events.MuonGood.pt[:, 0] > params["pt_leading_muon"])
-                    & (events.MuonGood.pt[:, 1] > params["pt_subleading_muon"])
+                    & (events.LeptonGood.pt[:, 0] > params["pt_leading_muon"])
+                    & (events.LeptonGood.pt[:, 1] > params["pt_subleading_muon"])
                 )
                 | (
                     double_electron
-                    & (events.ElectronGood.pt[:, 0] > params["pt_leading_electron"])
-                    & (events.ElectronGood.pt[:, 1] > params["pt_subleading_electron"])
+                    & (events.LeptonGood.pt[:, 0] > params["pt_leading_electron"])
+                    & (events.LeptonGood.pt[:, 1] > params["pt_subleading_electron"])
                 )
             )
             & (

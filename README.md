@@ -1,3 +1,4 @@
+```
 > voms-proxy-init -voms cms -rfc --valid 168:0
 > apptainer shell -B /afs -B /cvmfs/cms.cern.ch \
                 -B /tmp  -B /eos/cms/  -B /etc/sysconfig/ngbauth-submit \

@@ -69,33 +69,69 @@ def single_good_lepton(events, params, year, sample, **kwargs):
 
 # 1 lepton + 4 jets OR 1 lepton + 1 FatJet + 2 Jets
 def semileptonic(events, params, year, sample, **kwargs):
- #   single_electron = events.nElectronGood == 1
+    single_electron = events.nElectronGood == 1
     single_muon = events.nMuonGood == 1
+    double_electron = events.nElectronGood == 2
+    double_muon = events.nMuonGood == 2
     print(events.MET.pt)
     print(events.Muon.pt)
     print(events.MuonGood.pt)
-    mask = (
-        (events.nLeptonsGood == 1)
-        & (single_muon)
-        & ak.firsts(events.MuonGood.pt > params["pt_leading_muon"])
-        & (
-            (events.nCleanJets >= params["nJet"])
-            | (
-                (events.nCleanFatJets >= params["nFatJets"])
-                & (events.nCleanJets >= params["nJet_with_FatJet"])
+    if params["W"] is True:
+        mask = (
+            (events.nLeptonsGood == 1)
+            & (
+                (
+                    single_muon
+                    & ak.firsts(events.MuonGood.pt > params["pt_leading_muon"])
+                )
+                | (
+                    single_electron
+                    & ak.firsts(events.ElectronGood.pt > params["pt_leading_muon"])
+                )
+            )
+            & (
+                (events.nCleanJets >= params["nJet"])
+                | (
+                    (events.nCleanFatJets >= params["nFatJets"])
+                    & (events.nCleanJets >= params["nJet_with_FatJet"])
+                )
+            )
+            & (events.MET.pt > params["met"])
+        )
+
+    elif params["Z"] is True:
+        mask = (
+            (events.nLeptonsGood == 2)
+            & (
+                (
+                    double_muon
+                    & (events.MuonGood.pt[:, 0] > params["pt_leading_muon"])
+                    & (events.MuonGood.pt[:, 1] > params["pt_subleading_muon"])
+                )
+                | (
+                    double_electron
+                    & (events.ElectronGood.pt[:, 0] > params["pt_leading_electron"])
+                    & (events.ElectronGood.pt[:, 1] > params["pt_subleading_electron"])
+                )
+            )
+            & (
+                (events.nCleanJets >= params["nJet"])
+                | (
+                    (events.nCleanFatJets >= params["nFatJets"])
+                    & (events.nCleanJets >= params["nJet_with_FatJet"])
+                )
             )
         )
-        & (events.MET.pt > params["met"])
-    )
 
     print(mask)
 
     return ak.where(ak.is_none(mask), False, mask)
 
 
-semileptonic_presel = Cut(
-    name="semileptonic_presel", 
+semileptonic_preselW = Cut(
+    name="semileptonic_preselW", 
     params = {
+        "W" : True,
         "pt_leading_electron" : 20,
         "pt_leading_muon" : 20,
         "nJet" : 1, 
@@ -105,7 +141,20 @@ semileptonic_presel = Cut(
     },
     function = semileptonic,
 ) 
-    
+semileptonic_preselZ = Cut(
+    name="semileptonic_preselZ", 
+    params = {
+        "pt_leading_electron" : 20,
+        "pt_subleading_electron" : 20,
+        "pt_leading_muon" : 20,
+        "pt_subleading_muon" : 20,
+        "nJet" : 1, 
+        "nFatJets" : 1,
+        "nJet_with_FatJet" : 1,
+        "met" : 20,
+    },
+    function = semileptonic,
+) 
 VBS_jets_presel = Cut(
     name="VBS_jets_presel",
     params = {

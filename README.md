@@ -3,4 +3,4 @@
                 -B /tmp  -B /eos/cms/  -B /etc/sysconfig/ngbauth-submit \
                 -B ${XDG_RUNTIME_DIR}  --env KRB5CCNAME="FILE:${XDG_RUNTIME_DIR}/krb5cc" \
     /cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-analysis/general/pocketcoffea:lxplus-el9-stable
-> runner --cfg configuration_VBS.py -o [outputDir]
+> runner --cfg configuration_VBS.py -o [outputDir]ù

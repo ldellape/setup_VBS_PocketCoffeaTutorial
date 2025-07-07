@@ -39,25 +39,28 @@ cfg = Configurator(
     parameters=parameters,
     datasets = {
         "jsons" : [f"{localdir}/datasets/VBS_mc_132X_Summer23wmLHEGS.json"],
+         "filter" : {
+            "samples" : ["WZ"],
+        }
         }, # here json files with the list of files
     workflow=VBS_WV_Processor,
     skim = [
             get_nPVgood(1), 
             get_nObj_min_or(
-                [skim_dict["Muon"]["ptMin"],skim_dict["Electron"]["ptMin"]], 
-                [skim_dict["Muon"]["nMin"], skim_dict["Electron"]["nMin"]],
+                [skim_dict["Zlep_V"]["Muon"]["ptMin"],skim_dict["Zlep_V"]["Electron"]["ptMin"]], 
+                [skim_dict["Zlep_V"]["Muon"]["nMin"], skim_dict["Zlep_V"]["Electron"]["nMin"]],
                 ["Muon", "Electron"]),
             ],
-    preselections = [semileptonic_presel, VBS_jets_presel],
+    preselections = [semileptonic_preselZ, VBS_jets_presel],
     
     categories= {
         "baseline" : [passthrough],
-        "SingleEle_plus_VBSjets" : [get_nElectron(1, coll="ElectronGood")],
-        "SingleMuon_plus_VBSjets" : [get_nMuon(1, coll="MuonGood")],   
-        "SingleEle_plus_VBSjets_oneAK8_twoAK4" : [get_nElectron(1, coll="ElectronGood"), get_nObj_eq(1, coll="CleanFatJets"), get_nObj_eq(2, coll="CleanJets")],
-        "SingleEle_plus_VBSjets_fourAK4" : [get_nElectron(1, coll="ElectronGood"), get_nObj_eq(4 , coll="CleanJets")],
-        "SingleMuon_plus_VBSjets_oneAK8_twoAK4" : [get_nMuon(1, coll="MuonGood"), get_nObj_eq(1, coll="CleanFatJets"), get_nObj_eq(2, coll="CleanJets")],
-        "SingleMuon_plus_VBSjets_fourAK4" : [get_nMuon(1, coll="MuonGood"), get_nObj_eq(4 , coll="CleanJets")],
+        "DoubleEle_plus_VBSjets" : [get_nElectron(2, coll="ElectronGood")],
+        "DoubleMuon_plus_VBSjets" : [get_nMuon(2, coll="MuonGood")],   
+        "DoubleEle_plus_VBSjets_oneAK8_twoAK4" : [get_nElectron(2, coll="ElectronGood"), get_nObj_eq(1, coll="CleanFatJets"), get_nObj_eq(2, coll="CleanJets")],
+        "DoubleEle_plus_VBSjets_fourAK4" : [get_nElectron(2, coll="ElectronGood"), get_nObj_eq(4 , coll="CleanJets")],
+        "DoubleMuon_plus_VBSjets_oneAK8_twoAK4" : [get_nMuon(2, coll="MuonGood"), get_nObj_eq(1, coll="CleanFatJets"), get_nObj_eq(2, coll="CleanJets")],
+        "DoubleMuon_plus_VBSjets_fourAK4" : [get_nMuon(2, coll="MuonGood"), get_nObj_eq(4 , coll="CleanJets")],
     },    
     
     weights_classes = common_weights,

@@ -7,7 +7,7 @@
     /cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-analysis/general/pocketcoffea:lxplus-el9-stable
 > runner --cfg configuration_VBS.py -o [outputDir]
 
-```
+
 ------------------------------------------------------------------------------------------
 workflowVBS.py
 primo script ad essere eseguito. Definizione di nuove collezioni da usare successivamente nella selezione. I parametri che definiscono se un muone/elettrone/jet sono da considerarsi buoni o no sono nel file /parameters/object_presel.yaml
@@ -25,3 +25,4 @@ script principale. All'interno sono definiti tutti gli step che devono essere es
     definizione delle categorie sugli eventi che superano anche la preselection. 
 ------------------------------------------------------------------------------------------
 
+```

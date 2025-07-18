@@ -1,4 +1,5 @@
 ```
+> git clone https://github.com/ldellape/setup_VBS_PocketCoffeaTutorial.git
 > voms-proxy-init -voms cms -rfc --valid 168:0
 > apptainer shell -B /afs -B /cvmfs/cms.cern.ch \
                 -B /tmp  -B /eos/cms/  -B /etc/sysconfig/ngbauth-submit \
@@ -6,7 +7,7 @@
     /cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-analysis/general/pocketcoffea:lxplus-el9-stable
 > runner --cfg configuration_VBS.py -o [outputDir]
 
-
+```
 ------------------------------------------------------------------------------------------
 workflowVBS.py
 primo script ad essere eseguito. Definizione di nuove collezioni da usare successivamente nella selezione. I parametri che definiscono se un muone/elettrone/jet sono da considerarsi buoni o no sono nel file /parameters/object_presel.yaml
